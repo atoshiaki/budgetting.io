@@ -1,5 +1,5 @@
 const CACHE_NAME = 'static-cache-v2';
-const DATA_CACHE_NAME = 'data-cache-v1';
+const DATA_NAME = 'data-cache-v1';
 const CACHE_FILES = [
     '/',
     '/db.js',
@@ -26,7 +26,7 @@ self.addEventListener("activate", function(evt) {
       return Promise.all(
         keyList.map(key => {
           if (key !== CACHE_NAME && key !== DATA_NAME) {
-            console.log("Removing old cache data", key);
+            console.log("Removing old cached data", key);
             return caches.delete(key);
           }
         })
@@ -40,7 +40,7 @@ self.addEventListener("activate", function(evt) {
 self.addEventListener('fetch', function(evt) {
     if (evt.request.url.includes('/api/')) {
       evt.respondWith(
-        caches.open(DATA_CACHE_NAME).then(cache => {
+        caches.open(DATA_NAME).then(cache => {
           return fetch(evt.request)
             .then(response => {
               if (response.status === 200) {
